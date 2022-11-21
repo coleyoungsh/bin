@@ -1,0 +1,43 @@
+#! /bin/bash
+# ______ _    ____  ___ ______  ___  ______
+# |  _  \ |  | |  \/  | | ___ \/ _ \ | ___ \
+# | | | | |  | | .  . | | |_/ / /_\ \| |_/ /
+# | | | | |/\| | |\/| | | ___ \  _  ||    /
+# | |/ /\  /\  / |  | | | |_/ / | | || |\ \
+# |___/  \/  \/\_|  |_/ \____/\_| |_/\_| \_|
+#
+# obyx's status bar script for DWM
+
+timeDate() {
+	TIME="$(date +"%l:%M%p")"
+	DATE="$(date +"%a %b %d, %Y")"
+	echo -e "$TIME"
+}
+
+volume() {
+	VOL="$(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')"
+	echo -e "\ue050 $VOL"
+}
+
+network() {
+	ETHSTATUS="$(cat /sys/class/net/eno1/operstate)"
+	[ "$ETHSTATUS" = "up" ] && echo -e " up" || echo -e "\ue21f Disconnected"
+}
+
+vpn() {
+	MULLSTAT="$(mullvad status | awk '{ print $1 }')"
+	[ "$MULLSTAT" = "Connected" ] && echo -e "\ue0da" || echo -e "\ue8be"
+}
+
+weather() {
+	LOCATION="Roanoke"
+	WEATHER="$(curl wttr.in/$LOCATION?format="%C+%f")"
+	echo -e "$WEATHER"
+}
+
+SEP="$(echo -e "    ")"
+
+while true; do
+	xsetroot -name "$SEP$(vpn)$(network)$SEP$(volume)$SEP$(weather)$SEP$(timeDate)$SEP"
+	sleep 1s
+done
