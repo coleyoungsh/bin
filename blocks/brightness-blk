@@ -1,0 +1,12 @@
+#! /bin/sh
+DELIM="   "
+BR_ICONS=("\uf5dd" "\uf5de" "\uf5df")
+BR=$(xbacklight -get | tr '.' ' ' | cut -c -2)
+
+if [ "$BR" -le 33 ]; then
+	printf "${BR_ICONS[0]}$DELIM$BR"
+elif [ "$BR" -le 66 ]; then
+	printf "${BR_ICONS[1]}$DELIM$BR"
+elif [ "$BR" -le 100 ]; then
+	printf "${BR_ICONS[2]}$DELIM$BR"
+fi

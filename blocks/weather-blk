@@ -1,0 +1,3 @@
+#! /bin/sh
+LOCATION="Roanoke"
+printf "$(curl --silent wttr.in/$LOCATION?format="%C+%f")"

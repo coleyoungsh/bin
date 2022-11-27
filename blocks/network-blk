@@ -1,0 +1,10 @@
+#! /bin/sh
+DELIM="    "
+if echo $(nmcli) | grep -q "wireguard"; then
+	printf "\uf805$DELIM"
+fi
+case "$(nmcli connection show | awk 'FNR == 2 { print $(NF-1) }')" in
+	"wifi") printf "\uf1eb$DELIM$(nmcli connection show | awk 'FNR == 2 { print $1 }')" ;;
+	"ethernet") printf "\uf6ff$DELIM" ;;
+	*) printf "\uead0$DELIM"
+esac

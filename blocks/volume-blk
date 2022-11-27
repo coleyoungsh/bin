@@ -1,0 +1,16 @@
+#! /bin/sh
+DELIM="   "
+
+VOL_ICONS=("\ufa80" "\ufa7e" "\ufa7f" "\ufa7d")
+VAL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{ print $2 * 100 }')
+STAT=$(wpctl get-volume @DEFAULT_AUDIO_SINK@)
+
+if echo $STAT | grep -q "MUTED"; then
+	printf "${VOL_ICONS[0]}$DELIM$VAL"
+elif [ $VAL -le 33 ]; then
+	printf "${VOL_ICONS[1]}$DELIM$VAL"
+elif [ $VAL -le 66 ]; then
+	printf "${VOL_ICONS[2]}$DELIM$VAL"
+elif [ $VAL -le 100 ]; then
+	printf "${VOL_ICONS[3]}$DELIM$VAL"
+fi
