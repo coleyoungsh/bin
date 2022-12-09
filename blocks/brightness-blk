@@ -1,7 +1,7 @@
 #! /bin/sh
 DELIM="   "
 BR_ICONS=("\uf5dd" "\uf5de" "\uf5df")
-BR=$(xbacklight -get | tr '.' ' ' | cut -c -2)
+BR=$(xbacklight -get | tr '.' ' ' | awk '{print $1}')
 
 if [ "$BR" -le 33 ]; then
 	printf "${BR_ICONS[0]}$DELIM$BR"

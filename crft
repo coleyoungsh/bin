@@ -1,0 +1,2 @@
+#!/bin/sh
+picomc instance list | fzf --reverse --prompt "picomc: " | xargs -r prime-run picomc instance launch

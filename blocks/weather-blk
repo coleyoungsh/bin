@@ -1,3 +1,2 @@
 #! /bin/sh
-LOCATION="Roanoke"
-printf "$(curl --silent wttr.in/$LOCATION?format="%C+%f")"
+printf "$(curl --silent 'wttr.in/Roanoke?u2&format=%C+%f')"
