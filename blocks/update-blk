@@ -1,3 +1,2 @@
 #! /bin/sh
-DELIM="   "
-printf "\ufbae$DELIM$(paru -Sy > /dev/null  && paru -Qu | wc -l)"
+printf "U: $(paru -Sy > /dev/null  && paru -Qu | wc -l)"

@@ -1,31 +1,31 @@
 #! /bin/sh
-DELIM="  "
 
-BAT_ICONS=("\uf583" "\uf578" "\uf579" "\uf57a" "\uf57b" "\uf57c" "\uf57d" "\uf57e" "\uf57f" "\uf580" "\uf581")
+# BAT_ICONS=("\uf224" "\uf578" "\uf579" "\uf57a" "\uf57b" "\uf57c" "\uf57d" "\uf57e" "\uf57f" "\uf580" "\uf581")
 
 CAP=$(cat /sys/class/power_supply/BAT0/capacity)
 STAT=$(cat /sys/class/power_supply/BAT0/status)
+printf "B: $CAP"
 
-if echo $STAT | grep -q "Charging"; then
-	printf "${BAT_ICONS[0]}$DELIM$CAP"
-elif [ "$CAP" -le 10 ]; then
-	printf "${BAT_ICONS[1]}$DELIM$CAP"
-elif [ "$CAP" -le 20 ]; then
-	printf "${BAT_ICONS[2]}$DELIM$CAP"
-elif [ "$CAP" -le 30 ]; then
-	printf "${BAT_ICONS[3]}$DELIM$CAP"
-elif [ "$CAP" -le 40 ]; then
-	printf "${BAT_ICONS[4]}$DELIM$CAP"
-elif [ "$CAP" -le 50 ]; then
-	printf "${BAT_ICONS[5]}$DELIM$CAP"
-elif [ "$CAP" -le 60 ]; then
-	printf "${BAT_ICONS[6]}$DELIM$CAP"
-elif [ "$CAP" -le 70 ]; then
-	printf "${BAT_ICONS[7]}$DELIM$CAP"
-elif [ "$CAP" -le 80 ]; then
-	printf "${BAT_ICONS[8]}$DELIM$CAP"
-elif [ "$CAP" -le 90 ]; then
-	printf "${BAT_ICONS[9]}$DELIM$CAP"
-elif [ "$CAP" -le 100 ]; then
-	printf "${BAT_ICONS[1]}$DELIM$CAP"
-fi
+# if echo $STAT | grep -q "Charging"; then
+# 	printf "${BAT_ICONS[0]}$DELIM$CAP"
+# elif [ "$CAP" -le 10 ]; then
+# 	printf "${BAT_ICONS[1]}$DELIM$CAP"
+# elif [ "$CAP" -le 20 ]; then
+# 	printf "${BAT_ICONS[2]}$DELIM$CAP"
+# elif [ "$CAP" -le 30 ]; then
+# 	printf "${BAT_ICONS[3]}$DELIM$CAP"
+# elif [ "$CAP" -le 40 ]; then
+# 	printf "${BAT_ICONS[4]}$DELIM$CAP"
+# elif [ "$CAP" -le 50 ]; then
+# 	printf "${BAT_ICONS[5]}$DELIM$CAP"
+# elif [ "$CAP" -le 60 ]; then
+# 	printf "${BAT_ICONS[6]}$DELIM$CAP"
+# elif [ "$CAP" -le 70 ]; then
+# 	printf "${BAT_ICONS[7]}$DELIM$CAP"
+# elif [ "$CAP" -le 80 ]; then
+# 	printf "${BAT_ICONS[8]}$DELIM$CAP"
+# elif [ "$CAP" -le 90 ]; then
+# 	printf "${BAT_ICONS[9]}$DELIM$CAP"
+# elif [ "$CAP" -le 100 ]; then
+# 	printf "${BAT_ICONS[1]}$DELIM$CAP"
+# fi
