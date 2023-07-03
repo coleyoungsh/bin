@@ -1,0 +1,2 @@
+#!/bin/bash
+LIST_PROFILE=$(autorandr | awk -F " " '{print $1}' | dmenu -p "autorandr:" )

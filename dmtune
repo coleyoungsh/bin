@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+CURRENT_PROFILE=$(tuned-adm list | grep -i "current" | awk -F " " '{print $NF}')
+SELECTED_PROFILE=$(tuned-adm list | dmenu -p "Current Profile: ${CURRENT_PROFILE}" | awk -F " " '{print $2}')
+
+if [[ -n $SELECTED_PROFILE ]]; then
+  tuned-adm profile $SELECTED_PROFILE
+  notify-send "${SELECTED_PROFILE} profile" "activated"
+else
+  notify-send "${CURRENT_PROFILE} profile" "still active"
+  exit
+fi

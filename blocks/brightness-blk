@@ -1,12 +1,27 @@
 #! /bin/sh
-# BR_ICONS=("\uf5dd" "\uf5de" "\uf5df")
-BR=$(xbacklight -get | tr '.' ' ' | awk '{print $1}')
-printf "L: $BR"
 
-# if [ "$BR" -le 33 ]; then
-# 	printf "${BR_ICONS[0]}$DELIM$BR"
-# elif [ "$BR" -le 66 ]; then
-# 	printf "${BR_ICONS[1]}$DELIM$BR"
-# elif [ "$BR" -le 100 ]; then
-# 	printf "${BR_ICONS[2]}$DELIM$BR"
-# fi
+DELIM=" "
+BR_ICONS=("󱩎" "󱩏" "󱩐" "󱩑" "󱩒" "󱩓" "󱩔" "󱩕" "󱩖" "󰛨")
+BR=$(xbacklight -get | tr '.' ' ' | awk '{print $1}')
+
+if [ "$BR" -le 10 ]; then
+	printf "${BR_ICONS[0]}$DELIM$BR"
+elif [ "$BR" -le 20 ]; then
+	printf "${BR_ICONS[1]}$DELIM$BR"
+elif [ "$BR" -le 30 ]; then
+	printf "${BR_ICONS[2]}$DELIM$BR"
+elif [ "$BR" -le 40 ]; then
+	printf "${BR_ICONS[3]}$DELIM$BR"
+elif [ "$BR" -le 50 ]; then
+	printf "${BR_ICONS[4]}$DELIM$BR"
+elif [ "$BR" -le 60 ]; then
+	printf "${BR_ICONS[5]}$DELIM$BR"
+elif [ "$BR" -le 70 ]; then
+	printf "${BR_ICONS[6]}$DELIM$BR"
+elif [ "$BR" -le 80 ]; then
+	printf "${BR_ICONS[7]}$DELIM$BR"
+elif [ "$BR" -le 90 ]; then
+	printf "${BR_ICONS[8]}$DELIM$BR"
+elif [ "$BR" -le 100 ]; then
+	printf "${BR_ICONS[9]}$DELIM$BR"
+fi
