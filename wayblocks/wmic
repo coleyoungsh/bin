@@ -1,0 +1,12 @@
+#!/bin/sh
+
+source colors
+
+MIC_ICONS=("" "")
+MIC_STAT=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
+
+if echo $MIC_STAT | grep -q "MUTED"; then
+	printf "${MIC_ICONS[0]}"
+else
+	printf "${MIC_ICONS[1]}"
+fi

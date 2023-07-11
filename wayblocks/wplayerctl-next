@@ -1,0 +1,12 @@
+#!/bin/sh
+
+source colors
+
+case $BLOCK_BUTTON in
+  1) playerctl next ;;
+esac
+
+case "$(playerctl status)" in
+  "Paused") printf "^b$SURFACE0^^c$BLUE^" ;;
+  "Playing") printf "^b$SURFACE0^^c$BLUE^" ;;
+esac

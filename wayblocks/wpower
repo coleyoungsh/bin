@@ -1,0 +1,4 @@
+#!/bin/sh
+source colors
+
+printf "^c$RED^^b$SURFACE0^  ^d^"

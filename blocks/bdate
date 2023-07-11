@@ -1,0 +1,4 @@
+#!/bin/sh
+source colors
+
+printf "^b$SURFACE0^ $(date +'%I:%M%p') ^d^"

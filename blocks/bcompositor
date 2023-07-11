@@ -1,0 +1,15 @@
+#!/bin/sh
+
+source colors
+
+case "$BLOCK_BUTTON" in
+  1)  ;;
+esac
+
+if echo $(ps -A) | grep -q "picom"; then
+  printf "^b$BASE^^c$OVERLAY1^ 󱣴 picom ^d^"
+  killall picom
+else
+  printf "^b$SURFACE0^ 󱣴 picom ^d^"
+  picom -b
+fi

@@ -1,11 +1,17 @@
 #! /bin/sh
+source colors
+
+case $BLOCK_BUTTON in
+  1) st ;;
+esac
 
 NUM_UPDATES=$(paru -Sy > /dev/null  && paru -Qu | wc -l)
 PACKAGES=$(paru -Qu | awk '{print $1}')
 
 if [ ${NUM_UPDATES} -gt 0 ]; then
-  printf "^c#fab387^󰚰 ^d^${NUM_UPDATES}"
+  printf "^b$SURFACE2^ 󰚰 ${NUM_UPDATES}"
   notify-send "There are ${NUM_UPDATES} packages with available upgrades" "${PACKAGES}"
 else
   exit
 fi
+

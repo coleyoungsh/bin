@@ -1,34 +1,27 @@
 #! /bin/sh
-
-DELIM=" "
+source colors
 
 WIFI_ICONS=("󰤯" "󰤟" "󰤢" "󰤥" "󰤨")
 WIFI_NETWORK=$(nmcli connection show | awk 'FNR == 2 { print $1 }')
 SIG_STRENGTH=$(cat /proc/net/wireless | tr '.' ' ' | awk -F " " 'END{print $4}')
 
-
-if echo $(nmcli) | grep -q "wireguard"; then
-	printf "^c#a6e3a1^ ^d^"
-fi
-
 show_wifi ()
 {
-  if [ "${SIG_STRENGTH}" -le -100 ]; then
-    printf "${WIFI_ICONS[0]}$DELIM${WIFI_NETWORK}"
+   if [ "${SIG_STRENGTH}" -le -100 ]; then
+    printf "${WIFI_ICONS[0]} $WIFI_NETWORK"
   elif [ "${SIG_STRENGTH}" -le -80 ]; then
-    printf "${WIFI_ICONS[1]}$DELIM${WIFI_NETWORK}"
+    printf "${WIFI_ICONS[1]} $WIFI_NETWORK"
   elif [ "${SIG_STRENGTH}" -le -60 ]; then
-    printf "${WIFI_ICONS[2]}$DELIM${WIFI_NETWORK}"
+    printf "${WIFI_ICONS[2]} $WIFI_NETWORK"
   elif [ "${SIG_STRENGTH}" -le -40 ]; then
-    printf "${WIFI_ICONS[3]}$DELIM${WIFI_NETWORK}"
+    printf "${WIFI_ICONS[3]} $WIFI_NETWORK"
   elif [ "${SIG_STRENGTH}" -le -20 ]; then
-    printf "${WIFI_ICONS[4]}$DELIM${WIFI_NETWORK}"
+    printf "${WIFI_ICONS[4]} $WIFI_NETWORK"
   fi
 }
 
 case "$(nmcli connection show | awk 'FNR == 2 { print $(NF-1) }')" in
 	"wifi") show_wifi ;;
-	"ethernet") printf "󰈀${DELIM}Wired" ;;
-	*) printf "󱘖${DELIM}"
+	"ethernet") printf "󰈀" ;;
+	*) printf "󱘖"
 esac
-

@@ -1,0 +1,18 @@
+#! /bin/sh
+source colors
+
+VOL_ICONS=("󰝟" "󰕿" "󰖀" "󰕾")
+VAL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{ print $2 * 100 }')
+STAT=$(wpctl get-volume @DEFAULT_AUDIO_SINK@)
+
+if echo $STAT | grep -q "MUTED"; then
+	printf "${VOL_ICONS[0]} $VAL"
+elif [ $VAL -lt 33 ]; then
+	printf "${VOL_ICONS[1]} $VAL"
+elif [ $VAL -le 66 ]; then
+	printf "${VOL_ICONS[2]} $VAL"
+elif [ $VAL -le 100 ]; then
+	printf "${VOL_ICONS[3]} $VAL"
+elif [ $VAL -gt 100 ]; then
+	printf "${VOL_ICONS[3]} $VAL"
+fi

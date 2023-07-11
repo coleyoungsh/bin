@@ -1,0 +1,8 @@
+#! /bin/sh
+# printf "$(curl --silent 'wttr.in/Lewisburg?u2&format=%C+%f')"
+
+DELIM=" "
+WEATHER=$(curl --silent v2d.wttr.in/Lewisburg | grep "Weather:")
+ICON=$(echo $WEATHER | awk -F " " '{print $2}')
+TEMP=$(echo $WEATHER | tr ',' ' ' | awk -F " " '{print $5}')
+printf "$ICON$DELIM$TEMP"

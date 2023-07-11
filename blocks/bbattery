@@ -1,0 +1,24 @@
+#! /bin/sh
+
+source colors
+
+BAT_ICONS=("" "" "" "" "")
+
+CAP=$(cat /sys/class/power_supply/BAT0/capacity)
+STAT=$(cat /sys/class/power_supply/BAT0/status)
+
+if [ "$CAP" -le 10 ]; then
+	printf "${BAT_ICONS[0]}  $CAP"
+elif [ "$CAP" -le 25 ]; then
+	printf "${BAT_ICONS[1]}  $CAP"
+elif [ "$CAP" -le 50 ]; then
+	printf "${BAT_ICONS[2]}  $CAP"
+elif [ "$CAP" -le 75 ]; then
+	printf "${BAT_ICONS[3]}  $CAP"
+elif [ "$CAP" -le 100 ]; then
+	printf "${BAT_ICONS[4]}  $CAP"
+fi
+
+if echo $STAT | grep -q "Charging" || echo $STAT | grep -q "Full"; then
+	printf "^c$YELLOW^󱐋^c$TEXT^"
+fi

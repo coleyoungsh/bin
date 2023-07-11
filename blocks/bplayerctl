@@ -1,0 +1,7 @@
+#!/bin/sh
+source colors
+
+PLAYERCTL_ARTIST=$(playerctl metadata artist)
+PLAYERCTL_TITLE=$(playerctl metadata title)
+printf "^b$SURFACE0^ ^c$MUAVE^󰎈^c$TEXT^ $PLAYERCTL_ARTIST 󰇘 $PLAYERCTL_TITLE ^d^"
+

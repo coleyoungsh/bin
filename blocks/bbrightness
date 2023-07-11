@@ -1,0 +1,27 @@
+#! /bin/sh
+
+DELIM=" "
+BR_ICONS=("󱩎" "󱩏" "󱩐" "󱩑" "󱩒" "󱩓" "󱩔" "󱩕" "󱩖" "󰛨")
+BR=$(brillo | tr '.' ' ' | awk '{print $1}')
+
+if [ "$BR" -le 10 ]; then
+	printf "${BR_ICONS[0]} $BR"
+elif [ "$BR" -le 20 ]; then
+	printf "${BR_ICONS[1]} $BR"
+elif [ "$BR" -le 30 ]; then
+	printf "${BR_ICONS[2]} $BR"
+elif [ "$BR" -le 40 ]; then
+	printf "${BR_ICONS[3]} $BR"
+elif [ "$BR" -le 50 ]; then
+	printf "${BR_ICONS[4]} $BR"
+elif [ "$BR" -le 60 ]; then
+	printf "${BR_ICONS[5]} $BR"
+elif [ "$BR" -le 70 ]; then
+	printf "${BR_ICONS[6]} $BR"
+elif [ "$BR" -le 80 ]; then
+	printf "${BR_ICONS[7]} $BR"
+elif [ "$BR" -le 90 ]; then
+	printf "${BR_ICONS[8]} $BR"
+elif [ "$BR" -le 100 ]; then
+	printf "${BR_ICONS[9]} $BR"
+fi
