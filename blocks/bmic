@@ -2,8 +2,13 @@
 
 source colors
 
-MIC_ICONS=("^c$OVERLAY0^^c$TEXT^" "")
+# MIC_ICONS=("^c$OVERLAY0^^c$TEXT^" "^c$PEACH^^c$TEXT^")
+MIC_ICONS=("^c$OVERLAY0^󰑊 ^c$TEXT^" "^c$RED^󰑊 ^c$TEXT^")
 MIC_STAT=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
+
+case "$BLOCK_BUTTON" in
+  1)  wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle ;;
+esac
 
 if echo $MIC_STAT | grep -q "MUTED"; then
 	printf "${MIC_ICONS[0]}"

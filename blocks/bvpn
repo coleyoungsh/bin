@@ -3,7 +3,7 @@
 source colors
 
 if echo $(nmcli) | grep -q "wireguard" || echo $(nmcli) | grep -q "ovpn"; then
-	printf "^c$GREEN^ ^c$TEXT^VPN"
+	printf "^c$GREEN^  ^c$TEXT^^d^"
 else
-  printf "^c$OVERLAY0^ VPN^c$TEXT^"
+  printf "^c$OVERLAY0^  ^c$TEXT^^d^"
 fi

@@ -2,23 +2,43 @@
 
 source colors
 
-BAT_ICONS=("" "" "" "" "")
+BAT_ICONS=("󰁺" "󰁻" "󰁼" "󰁽" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹")
+
+# BAT_ICONS=( \
+#   "^c$RED^󰹞^c$SURFACE0^󰹞󰹞󰹞󰹞^d^" \
+#   "^c$GREEN^󰹞󰹞^c$SURFACE0^󰹞󰹞󰹞^d^" \
+#   "^c$GREEN^󰹞󰹞󰹞^c$SURFACE0^󰹞󰹞^d^" \
+#   "^c$GREEN^󰹞󰹞󰹞󰹞^c$SURFACE0^󰹞^d^" \
+#   "^c$GREEN^󰹞󰹞󰹞󰹞󰹞^d^" \
+#   )
 
 CAP=$(cat /sys/class/power_supply/BAT0/capacity)
 STAT=$(cat /sys/class/power_supply/BAT0/status)
 
-if [ "$CAP" -le 10 ]; then
-	printf "${BAT_ICONS[0]}  $CAP"
-elif [ "$CAP" -le 25 ]; then
-	printf "${BAT_ICONS[1]}  $CAP"
-elif [ "$CAP" -le 50 ]; then
-	printf "${BAT_ICONS[2]}  $CAP"
-elif [ "$CAP" -le 75 ]; then
-	printf "${BAT_ICONS[3]}  $CAP"
-elif [ "$CAP" -le 100 ]; then
-	printf "${BAT_ICONS[4]}  $CAP"
+# if [ "$CAP" -le 10 ]; then printf " ${BAT_ICONS[0]}"
+# elif [ "$CAP" -le 30 ]; then printf " ${BAT_ICONS[1]}"
+# elif [ "$CAP" -le 60 ]; then printf " ${BAT_ICONS[2]}"
+# elif [ "$CAP" -le 90 ]; then printf " ${BAT_ICONS[3]}"
+# else printf " ${BAT_ICONS[4]}"
+# fi
+
+if [ "$CAP" -le 10 ]; then printf " ${BAT_ICONS[0]}"
+elif [ "$CAP" -le 30 ]; then printf " ${BAT_ICONS[1]}"
+elif [ "$CAP" -le 40 ]; then printf " ${BAT_ICONS[2]}"
+elif [ "$CAP" -le 50 ]; then printf " ${BAT_ICONS[3]}"
+elif [ "$CAP" -le 60 ]; then printf " ${BAT_ICONS[4]}"
+elif [ "$CAP" -le 70 ]; then printf " ${BAT_ICONS[5]}"
+elif [ "$CAP" -le 80 ]; then printf " ${BAT_ICONS[6]}"
+elif [ "$CAP" -le 90 ]; then printf " ${BAT_ICONS[7]}"
+elif [ "$CAP" -gt 90 ]; then printf " ${BAT_ICONS[8]}"
+else printf " ${BAT_ICONS[4]}"
 fi
 
+printf " $CAP"
+
 if echo $STAT | grep -q "Charging" || echo $STAT | grep -q "Full"; then
-	printf "^c$YELLOW^󱐋^c$TEXT^"
+	printf "^c$YELLOW^󱐋^d^"
+else
+	printf "^c$SURFACE2^󱐋^d^"
 fi
+

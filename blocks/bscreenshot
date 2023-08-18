@@ -1,0 +1,9 @@
+#!/bin/sh
+
+source colors
+
+case "$BLOCK_BUTTON" in
+  1) flameshot gui ;;
+esac
+
+printf "^b$CUSTOM_BG^  󰄀 ^d^"

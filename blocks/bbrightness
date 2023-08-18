@@ -1,6 +1,5 @@
 #! /bin/sh
 
-DELIM=" "
 BR_ICONS=("󱩎" "󱩏" "󱩐" "󱩑" "󱩒" "󱩓" "󱩔" "󱩕" "󱩖" "󰛨")
 BR=$(brillo | tr '.' ' ' | awk '{print $1}')
 

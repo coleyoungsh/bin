@@ -1,7 +1,0 @@
-#!/bin/sh
-source colors
-
-PLAYERCTL_ARTIST=$(playerctl metadata artist)
-PLAYERCTL_TITLE=$(playerctl metadata title)
-printf "󰎈 $PLAYERCTL_ARTIST 󰇘 $PLAYERCTL_TITLE "
-

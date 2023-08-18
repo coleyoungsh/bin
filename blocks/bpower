@@ -1,4 +1,4 @@
 #!/bin/sh
 source colors
 
-printf "^c$RED^^b$SURFACE0^  ^d^"
+printf "^b$CUSTOM_BG^^c$RED^   ^d^"

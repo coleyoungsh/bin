@@ -7,6 +7,6 @@ case $BLOCK_BUTTON in
 esac
 
 case "$(playerctl status)" in
-  "Paused") printf "^b$SURFACE0^^c$BLUE^" ;;
-  "Playing") printf "^b$SURFACE0^^c$BLUE^" ;;
+  "Paused") printf "^b$SURFACE0^^c$BLUE^  󰒭 ^d^" ;;
+  "Playing") printf "^b$SURFACE0^^c$BLUE^  󰒭 ^d^" ;;
 esac

@@ -7,9 +7,11 @@ case "$BLOCK_BUTTON" in
 esac
 
 if echo $(ps -A) | grep -q "picom"; then
-  printf "^b$BASE^^c$OVERLAY1^ 󱣴 picom ^d^"
+  # printf "^b$CUSTOM_BG^^c$OVERLAY1^  󱣴 ^d^"
+  printf "^c$OVERLAY1^󱣴 ^d^"
   killall picom
 else
-  printf "^b$SURFACE0^ 󱣴 picom ^d^"
+  # printf "^b$SURFACE0^  󱣴 ^d^"
+  printf "󱣴 "
   picom -b
 fi

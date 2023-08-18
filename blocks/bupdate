@@ -1,16 +1,15 @@
 #! /bin/sh
 source colors
 
-case $BLOCK_BUTTON in
-  1) st ;;
-esac
-
 NUM_UPDATES=$(paru -Sy > /dev/null  && paru -Qu | wc -l)
 PACKAGES=$(paru -Qu | awk '{print $1}')
 
+case $BLOCK_BUTTON in
+  1) notify-send "There are ${NUM_UPDATES} packages with available upgrades" "${PACKAGES}" ;;
+esac
+
 if [ ${NUM_UPDATES} -gt 0 ]; then
-  printf "^b$SURFACE2^ 󰚰 ${NUM_UPDATES}"
-  notify-send "There are ${NUM_UPDATES} packages with available upgrades" "${PACKAGES}"
+  printf "󰚰 ${NUM_UPDATES}^d^"
 else
   exit
 fi

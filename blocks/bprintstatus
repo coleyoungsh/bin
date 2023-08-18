@@ -4,12 +4,8 @@ source colors
 
 D="  "
 
-case "$BLOCK_BUTTON" in
-  1) notify-send "spawn eww"
-  ;;
-esac
+printf "$(bvolume)$D$(bnetwork)$D$(bbattery)^d^"
 
-printf "^b$SURFACE0^ $(bbattery)$D$(bbrightness)$D$(bmic)$D$(bvolume)$D$(bvpn)$D$(bnetwork) ^d^"
 
 
 

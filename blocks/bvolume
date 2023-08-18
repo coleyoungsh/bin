@@ -1,9 +1,13 @@
 #! /bin/sh
 source colors
 
-VOL_ICONS=("^c$OVERLAY0^󰝟" "󰕿" "󰖀" "󰕾")
+VOL_ICONS=("^c$OVERLAY0^󰝟 " "󰕿 " "󰖀 " "󰕾 ")
 VAL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{ print $2 * 100 }')
 STAT=$(wpctl get-volume @DEFAULT_AUDIO_SINK@)
+
+case "$BLOCK_BUTTON" in
+  1)  wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
+esac
 
 if echo $STAT | grep -q "MUTED"; then
 	printf "${VOL_ICONS[0]} $VAL"
@@ -14,5 +18,18 @@ elif [ $VAL -le 66 ]; then
 elif [ $VAL -le 100 ]; then
 	printf "${VOL_ICONS[3]} $VAL"
 elif [ $VAL -gt 100 ]; then
-	printf "${VOL_ICONS[3]} $VAL"
+	printf "${VOL_ICONS[3]} $VAL^c$RED^"
 fi
+# if echo $STAT | grep -q "MUTED"; then
+# 	printf "${VOL_ICONS[0]}"
+# elif [ $VAL -lt 33 ]; then
+# 	printf "${VOL_ICONS[1]}"
+# elif [ $VAL -le 66 ]; then
+# 	printf "${VOL_ICONS[2]}"
+# elif [ $VAL -le 100 ]; then
+# 	printf "${VOL_ICONS[3]}"
+# elif [ $VAL -gt 100 ]; then
+# 	printf "${VOL_ICONS[3]}^c$RED^"
+# fi
+
+printf "^d^"

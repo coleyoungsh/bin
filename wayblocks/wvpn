@@ -1,9 +1,0 @@
-#!/bin/sh
-
-source colors
-
-if echo $(nmcli) | grep -q "wireguard" || echo $(nmcli) | grep -q "ovpn"; then
-	printf " VPN"
-else
-  printf " VPN"
-fi
