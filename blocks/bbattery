@@ -34,7 +34,7 @@ elif [ "$CAP" -gt 90 ]; then printf " ${BAT_ICONS[8]}"
 else printf " ${BAT_ICONS[4]}"
 fi
 
-printf " $CAP"
+printf " $CAP"
 
 if echo $STAT | grep -q "Charging" || echo $STAT | grep -q "Full"; then
 	printf "^c$YELLOW^󱐋^d^"

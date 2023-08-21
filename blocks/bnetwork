@@ -35,6 +35,6 @@ show_wifi ()
 
 case "$(nmcli connection show | awk 'FNR == 2 { print $(NF-1) }')" in
 	"wifi") show_wifi ;;
-	"ethernet") printf "󰈀 " ;;
+	"ethernet") printf "󰈀" ;;
 	*) printf "󱘖 "
 esac

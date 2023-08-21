@@ -10,15 +10,15 @@ case "$BLOCK_BUTTON" in
 esac
 
 if echo $STAT | grep -q "MUTED"; then
-	printf "${VOL_ICONS[0]} $VAL"
+	printf "${VOL_ICONS[0]} $VAL"
 elif [ $VAL -lt 33 ]; then
-	printf "${VOL_ICONS[1]} $VAL"
+	printf "${VOL_ICONS[1]} $VAL"
 elif [ $VAL -le 66 ]; then
-	printf "${VOL_ICONS[2]} $VAL"
+	printf "${VOL_ICONS[2]} $VAL"
 elif [ $VAL -le 100 ]; then
-	printf "${VOL_ICONS[3]} $VAL"
+	printf "${VOL_ICONS[3]} $VAL"
 elif [ $VAL -gt 100 ]; then
-	printf "${VOL_ICONS[3]} $VAL^c$RED^"
+	printf "${VOL_ICONS[3]} $VAL^c$RED^"
 fi
 # if echo $STAT | grep -q "MUTED"; then
 # 	printf "${VOL_ICONS[0]}"

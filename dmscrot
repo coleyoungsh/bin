@@ -1,0 +1,19 @@
+#!/bin/sh
+
+SCSH_FORMAT="%b%d::%H%M%S.png"
+SCSH_DIR="$HOME/pic/scrot/$SCSH_FORMAT"
+OPTS="save screen\nsave selection\ncopy screen\ncopy selection"
+SCSH_TYPE=$(echo -e $OPTS | dmenu -c -p "󰹑  Screenshot:")
+
+mkdir -p $SCSH_DIR
+
+case "$SCSH_TYPE" in
+  "save screen") scrot -o $SCSH_DIR && notify-send "Screenshot" "Saved to $SCSH_DIR"
+  ;;
+  "save selection") scrot -s -o $SCSH_DIR && notify-send "Selection" "Saved to $SCSH_DIR"
+  ;;
+  "copy screen") scrot -e 'xclip -selection clipboard -t image/png -i $f' && notify-send "Screen" "Copied to clipboard"
+  ;;
+  "copy selection") scrot -s -e 'xclip -selection clipboard -t image/png -i $f' && notify-send "Selection" "Copied to clipboard"
+  ;;
+esac
