@@ -1,4 +1,8 @@
 #!/bin/sh
 source colors
 
-printf "$(date +'%I:%M')"
+printf "^d^"
+
+printf "$(date +'%-I:%M %p')"
+
+printf "^d^"

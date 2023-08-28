@@ -1,9 +1,16 @@
 #!/bin/sh
 source colors
 
+printf "^d^"
+
 PLAYERCTL_ARTIST=$(playerctl metadata artist)
 PLAYERCTL_TITLE=$(playerctl metadata title)
-case "$(playerctl status)" in
-  "Paused") printf "^b$SURFACE0^ ^c$GREEN^󰎈^c$TEXT^ $PLAYERCTL_ARTIST 󰇘 $PLAYERCTL_TITLE ^d^";;
-  "Playing") printf "^b$SURFACE0^ ^c$GREEN^󰎈^c$TEXT^ $PLAYERCTL_ARTIST 󰇘 $PLAYERCTL_TITLE ^d^";;
-esac
+
+if [[ $(playerctl status) == "Paused" || $(playerctl status) == "Playing" ]]; then
+  # printf "^b$SURFACE0^"
+  printf "^c$GREEN^󰎈 "
+  [[ ! -z $PLAYERCTL_ARTIST ]] && printf "^c$TEXT^$PLAYERCTL_ARTIST 󰇘 "
+  [[ ${#PLAYERCTL_TITLE} -gt 50 ]] && PLAYERCTL_TITLE=$(echo $PLAYERCTL_TITLE | cut -c1-50) && printf "^c$TEXT^$PLAYERCTL_TITLE... " || printf "^c$TEXT^$PLAYERCTL_TITLE"
+fi
+
+printf "^d^"

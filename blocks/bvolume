@@ -1,7 +1,9 @@
 #! /bin/sh
 source colors
 
-VOL_ICONS=("^c$OVERLAY0^󰝟 " "󰕿 " "󰖀 " "󰕾 ")
+printf "^d^"
+
+VOL_ICONS=("^c$SURFACE1^󰝟 ^d^" "󰕿 " "󰖀 " "󰕾 ")
 VAL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{ print $2 * 100 }')
 STAT=$(wpctl get-volume @DEFAULT_AUDIO_SINK@)
 

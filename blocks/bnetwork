@@ -1,11 +1,13 @@
 #! /bin/sh
 source colors
 
-WIFI_ICONS=("󰤯" "󰤟" "󰤢" "󰤥" "󰤨")
+printf "^d^"
+
+WIFI_ICONS=("󰤯 " "󰤟 " "󰤢 " "󰤥 " "󰤨 ")
 WIFI_NETWORK=$(nmcli connection show | awk 'FNR == 2 { print $1 }')
 SIG_STRENGTH=$(cat /proc/net/wireless | tr '.' ' ' | awk -F " " 'END{print $4}')
 
-echo $(nmcli) | grep -q "wireguard" || echo $(nmcli) | grep -q "ovpn" && WIFI_ICONS=("󰤬" "󰤡" "󰤤" "󰤧" "󰤪")
+echo $(nmcli) | grep -q "wireguard" || echo $(nmcli) | grep -q "ovpn" && WIFI_ICONS=("󰤬 " "󰤡 " "󰤤 " "󰤧 " "󰤪 ")
 
 show_wifi ()
 {
