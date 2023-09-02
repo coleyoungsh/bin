@@ -2,10 +2,7 @@
 
 source colors
 
-printf "^d^"
-
 MIC_ICONS=("^c$SURFACE1^ ^c$TEXT^" "^c$TEXT^ ^c$TEXT^")
-# MIC_ICONS=("^c$OVERLAY0^󰑊 ^c$TEXT^" "^c$RED^󰑊 ^c$TEXT^")
 MIC_STAT=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
 MIC_VAL=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{ print $2 * 100 }')
 
@@ -18,5 +15,3 @@ if echo $MIC_STAT | grep -q "MUTED"; then
 else
 	printf "${MIC_ICONS[1]}$MIC_VAL"
 fi
-
-printf "^d^"

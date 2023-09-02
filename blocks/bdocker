@@ -2,10 +2,6 @@
 
 source colors
 
-printf "^d^"
-
 NUM_CONTAINERS=$(docker ps -q | wc -l)
 
 [[ NUM_CONTAINERS -gt 0 ]] && printf "^c$BLUE^󰡨 ^c$TEXT^$NUM_CONTAINERS"
-
-printf "^d^"

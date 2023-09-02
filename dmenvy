@@ -1,0 +1,13 @@
+#!/bin/sh
+GPU_OPTS="integrated\nhybrid\nnvidia [doesn't work]"
+GPU_S=$(echo -e $GPU_OPTS | dmenu -c -p " GPU:")
+
+[[ -z $GPU_S ]] && echo "switch aborted" && exit 0
+[[ $GPU_S == "hybrid" ]] && GPU_S="hybrid --rtd3"
+
+RB_OPTS="yes\nno"
+RB_S=$(echo -e $RB_OPTS | dmenu -c -p "󰑓 Reboot:")
+
+sudo envycontrol -s $GPU_S
+
+[[ $RB_S == "yes" ]] && sudo reboot
