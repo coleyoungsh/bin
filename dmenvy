@@ -1,6 +1,6 @@
 #!/bin/sh
 GPU_OPTS="integrated\nhybrid\nnvidia [doesn't work]"
-GPU_S=$(echo -e $GPU_OPTS | dmenu -c -p " GPU:")
+GPU_S=$(echo -e $GPU_OPTS | dmenu -c -p " GPU [$(envycontrol -q)]:")
 
 [[ -z $GPU_S ]] && echo "switch aborted" && exit 0
 [[ $GPU_S == "hybrid" ]] && GPU_S="hybrid --rtd3"

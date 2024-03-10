@@ -1,6 +1,8 @@
 #! /bin/sh
 source colors
 
+
+# pkill -RTMIN+6 dwmblocks
 VOL_ICONS=("^c$SURFACE1^󰝟 ^d^" "󰕿 " "󰖀 " "󰕾 ")
 VAL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{ print $2 * 100 }')
 STAT=$(wpctl get-volume @DEFAULT_AUDIO_SINK@)
@@ -20,3 +22,5 @@ elif [ $VAL -le 100 ]; then
 elif [ $VAL -gt 100 ]; then
 	printf "${VOL_ICONS[3]} $VAL^c$RED^"
 fi
+
+# find ~/.local/state/wireplumber/* | entr -pr pkill -RTMIN+6 dwmblocks

@@ -9,3 +9,5 @@ if [[ $(playerctl status) == "Paused" || $(playerctl status) == "Playing" ]]; th
   [[ ! -z $PLAYERCTL_ARTIST ]] && printf "^c$TEXT^$PLAYERCTL_ARTIST 󰇘 "
   [[ ${#PLAYERCTL_TITLE} -gt 50 ]] && PLAYERCTL_TITLE=$(echo $PLAYERCTL_TITLE | cut -c1-50) && printf "^c$TEXT^$PLAYERCTL_TITLE... " || printf "^c$TEXT^$PLAYERCTL_TITLE"
 fi
+
+# find ~/.local/state/wireplumber/* | entr -r pkill -RTMIN+1 dwmblocks >> /dev/null &
