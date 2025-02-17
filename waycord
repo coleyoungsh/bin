@@ -1,2 +1,0 @@
-#! /bin/sh
-exec webcord --enable-features=UseOzonePlatform --ozone-platform=wayland --log debug --log debug --log debug --log debug --log debug --log debug --log debug --log debug --log debug --log debug  --enable-features=UseOzonePlatform --ozone-platform=wayland
