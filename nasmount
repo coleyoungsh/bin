@@ -1,0 +1,19 @@
+#! /bin/sh
+
+SRV_ADDRESS="10.0.4.1"
+USERNAME="cole"
+PASS="$(pass show synology.young.sh/$USERNAME)"
+[[ "$1" == "-u" ]] && TARGET=$2 || TARGET=$1
+MOUNTPOINT="/mnt/$TARGET"
+
+case "$1" in
+  "-u") 
+    sudo umount -R $MOUNTPOINT
+    echo "$TARGET unmounted from $MOUNTPOINT"
+    ;;
+  *) 
+    sudo mount --mkdir -t cifs //$SRV_ADDRESS/$TARGET $MOUNTPOINT -o username=$USERNAME,password=$PASS,uid=$USERNAME,gid=$USERNAME
+    echo "$TARGET mounted to $MOUNTPOINT"
+  ;;
+esac
+
