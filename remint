@@ -31,7 +31,7 @@
 # values. They can be altered here directly, or placed into a 'remint.conf'
 # file alongside 'remint.sh' or in your Remind data directory (~/.reminders/,
 # ~/.config/remind/, or one set in DOTREMINDERS) to persist after updates.
-DEFAULTFILE="100-remint.rem" # Default file to edit and add new events to if
+DEFAULTFILE="personal.rem" # Default file to edit and add new events to if
 			     # the Remind data path is a directory
 COLOR="-@2"         # COLOR="" to disable, COLOR="-@1" for 256 colors only.
 FORMAT="1"          # FORMAT="1" means 24h format, FORMAT="0" means am/pm.
