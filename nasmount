@@ -1,19 +1,30 @@
 #! /bin/sh
+# TODO: refactor to functions
 
 SRV_ADDRESS="10.0.4.1"
 USERNAME="cole"
 PASS="$(pass show synology.young.sh/$USERNAME)"
 [[ "$1" == "-u" ]] && TARGET=$2 || TARGET=$1
-MOUNTPOINT="/mnt/$TARGET"
+MOUNTPOINT="/mnt"
 
 case "$1" in
   "-u") 
-    sudo umount -R $MOUNTPOINT
-    echo "$TARGET unmounted from $MOUNTPOINT"
+    sudo umount -R $MOUNTPOINT/$TARGET
+    echo "$TARGET unmounted from $MOUNTPOINT/$TARGET"
+    ;;
+  "-m") 
+    TARGET=$(ls $MOUNTPOINT | tofi --prompt-text "Mount directory: ")
+    sudo mount --mkdir -t cifs //$SRV_ADDRESS/$TARGET $MOUNTPOINT/$TARGET -o username=$USERNAME,password=$PASS,uid=$USERNAME,gid=$USERNAME
+    notify-send "$TARGET" "mounted to $MOUNTPOINT/$TARGET"
+    ;;
+  "-um") 
+    TARGET=$(ls $MOUNTPOINT | tofi --prompt-text "Unmount directory: ")
+    sudo umount -R $MOUNTPOINT/$TARGET
+    notify-send "$TARGET" "unmounted from $MOUNTPOINT/$TARGET"
     ;;
   *) 
-    sudo mount --mkdir -t cifs //$SRV_ADDRESS/$TARGET $MOUNTPOINT -o username=$USERNAME,password=$PASS,uid=$USERNAME,gid=$USERNAME
-    echo "$TARGET mounted to $MOUNTPOINT"
+    sudo mount --mkdir -t cifs //$SRV_ADDRESS/$TARGET $MOUNTPOINT/$TARGET -o username=$USERNAME,password=$PASS,uid=$USERNAME,gid=$USERNAME
+    echo "$TARGET mounted to $MOUNTPOINT/$TARGET"
   ;;
 esac
 
