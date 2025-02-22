@@ -99,7 +99,7 @@ case "$chosen" in
 		done
 
 		# Decrypt in a terminal window
-		${TERMINAL:-st} -n floatterm -g 60x1 -e sudo cryptsetup open "$chosen" "usb$num"
+		${TERMINAL:-ghostty} -e sudo cryptsetup open "$chosen" "usb$num"
 		# Check if now decrypted.
 		test -b "/dev/mapper/usb$num"
 
