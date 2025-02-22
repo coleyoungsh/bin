@@ -13,13 +13,13 @@ case "$1" in
     echo "$TARGET unmounted from $MOUNTPOINT/$TARGET"
     ;;
   "-m") 
-    TARGET=$(ls $MOUNTPOINT | tofi --prompt-text "Mount directory: ")
+    TARGET=$(ls $MOUNTPOINT | tofi --prompt-text "Mount NAS: ")
     sudo mount --mkdir -t cifs //$SRV_ADDRESS/$TARGET $MOUNTPOINT/$TARGET -o username=$USERNAME,password=$PASS,uid=$USERNAME,gid=$USERNAME && notify-send "$TARGET" "mounted to $MOUNTPOINT/$TARGET"
     ;;
   "-um") 
     TARGET=$(mount -l -t cifs | awk '{print $3}' | tofi --prompt-text "Unmount directory: ")
     echo $TARGET
-    sudo umount -R $TARGET && notify-send "$TARGET" "unmounted from $MOUNTPOINT/$TARGET"
+    sudo umount -R $TARGET && notify-send "Unmounted" "$TARGET"
     ;;
   *) 
     sudo mount --mkdir -t cifs //$SRV_ADDRESS/$TARGET $MOUNTPOINT/$TARGET -o username=$USERNAME,password=$PASS,uid=$USERNAME,gid=$USERNAME
