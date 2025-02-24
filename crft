@@ -1,2 +1,2 @@
 #!/bin/sh
-picomc instance list | fzf --reverse --prompt "picomc: " | xargs -r picomc instance launch
+picomc instance list | tofi --prompt-text "picomc: " | xargs -r picomc instance launch
