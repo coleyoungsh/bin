@@ -1,9 +1,0 @@
-#!/bin/sh
-
-source colors
-
-
-
-case "$BLOCK_BUTTON" in
-  1)  [[ grep -q '1']] ;;
-esac
