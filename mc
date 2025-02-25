@@ -23,7 +23,7 @@ mkdir -p $INSTANCE_DIR
 
 [[ ! -z $INSTANCE ]] && case "$INSTANCE" in
   "vanilla") portablemc --output human-color --main-dir $INSTANCE_DIR/$INSTANCE --work-dir $INSTANCE_DIR/$INSTANCE start fabric:1.21.4 -l $AUTH_USER --auth-no-browser;;
-  "meteor") portablemc --output human-color --main-dir $INSTANCE_DIR/$INSTANCE --work-dir $INSTANCE_DIR/$INSTANCE start fabric:1.21 -l $AUTH_USER --auth-no-browser;;
+  "meteor") portablemc --output human-color --main-dir $INSTANCE_DIR/$INSTANCE --work-dir $INSTANCE_DIR/$INSTANCE start fabric:1.21.4 -l $AUTH_USER --auth-no-browser;;
   *) portablemc --output human-color --main-dir $INSTANCE_DIR/$INSTANCE --work-dir $INSTANCE_DIR/$INSTANCE start fabric: -l $AUTH_USER --auth-no-browser;;
 esac
 
