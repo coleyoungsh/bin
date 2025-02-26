@@ -36,7 +36,7 @@ repo_status ()
   do
     cd "$repo"
     print_origin
-    git status -uno
+    git status -u
     hr
   done
 }
