@@ -2,6 +2,7 @@
 
 repo_dirs=(
 $HOME/.dotfiles 
+$HOME/.password-store 
 $HOME/.local/bin 
 $HOME/.todo
 $HOME/.reminders
