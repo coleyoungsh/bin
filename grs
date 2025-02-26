@@ -1,0 +1,49 @@
+#! /bin/sh
+
+repo_dirs=(
+$HOME/.dofiles 
+$HOME/.local/bin 
+$HOME/.todo
+$HOME/.reminders
+$HOME/Documents/notes
+$HOME/.local/repos/make-total-deploy)
+
+hr() { 
+  i=1; while [ $i -le $COLUMNS ] ; do 
+    i=$((i+1)); printf "%s" "${1:-=}"; 
+  done; 
+} # https://www.reddit.com/r/commandline/comments/sdy47y/print_a_horizontal_line_to_the_console_spanning/
+
+print_origin() {
+  printf "\e[32m$(git config get remote.origin.url)\e[0m "
+}
+
+repo_pull ()
+{
+  for repo in ${repo_dirs[@]}
+  do
+    cd "$repo"
+    print_origin
+    git pull --rebase
+    hr 
+  done
+}
+
+repo_status ()
+{
+  for repo in ${repo_dirs[@]}
+  do
+    cd "$repo"
+    print_origin
+    git status
+    hr
+  done
+}
+
+case "$1" in
+  "-p") repo_pull
+  ;;
+  *) repo_status
+  ;;
+esac
+
