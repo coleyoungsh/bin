@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+#count new mail for every maildir, only in INBOX
+# since there are maildirs/accounts in a format `~/Mail/account1/subacc1`,
+# `~/Mail/account1/subacc2`, `~/Mail/account2/subacc1` etc
+# there should be such an expansion
+maildirnew="$XDG_DATA_HOME/mail/$1/INBOX/new/"
+new="$(find $maildirnew -type f | wc -l)"
+
+#count old mail for every maildir
+maildirold="$XDG_DATA_HOME/mail/$1/INBOX/cur/"
+old="$(find $maildirold -type f | wc -l)"
+
+#`notify-send` requires connection to DBUS_SESSION_BUS_ADDRESS
+# and one way is to export display and use X server authority cookies thru .Xauthority
+# see here https://askubuntu.com/questions/298608/notify-send-doesnt-work-from-crontab
+export DISPLAY=:0; export XAUTHORITY=~/.Xauthority
+
+if [ $new -gt 0 ]
+then
+  /usr/bin/notify-send "  New mail for $1" "New: $new Old: $old"
+fi
