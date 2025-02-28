@@ -1,22 +1,27 @@
 #!/usr/bin/bash
 
-#count new mail for every maildir, only in INBOX
-# since there are maildirs/accounts in a format `~/Mail/account1/subacc1`,
-# `~/Mail/account1/subacc2`, `~/Mail/account2/subacc1` etc
-# there should be such an expansion
-maildirnew="$XDG_DATA_HOME/mail/$1/INBOX/new/"
-new="$(find $maildirnew -type f | wc -l)"
-
-#count old mail for every maildir
-maildirold="$XDG_DATA_HOME/mail/$1/INBOX/cur/"
-old="$(find $maildirold -type f | wc -l)"
-
-#`notify-send` requires connection to DBUS_SESSION_BUS_ADDRESS
-# and one way is to export display and use X server authority cookies thru .Xauthority
-# see here https://askubuntu.com/questions/298608/notify-send-doesnt-work-from-crontab
-export DISPLAY=:0; export XAUTHORITY=~/.Xauthority
-
-if [ $new -gt 0 ]
-then
-  /usr/bin/notify-send "  New mail for $1" "New: $new Old: $old"
-fi
+# Thanks Luke.
+# https://github.com/LukeSmithxyz/mutt-wizard/blob/master/bin/mailsync
+new=$(find\
+		"$HOME/.local/share/mail/$1/"[Ii][Nn][Bb][Oo][Xx]/new/ \
+		-type f 2> /dev/null)
+	newcount=$(echo "$new" | sed '/^\s*$/d' | wc -l)
+case 1 in
+	$((newcount > 5)) )
+  	echo "$newcount new mail for $1."
+		notify-send "New Mail!" "󰶊  $newcount new mail(s) in \`$1\` account."
+		;;
+	$((newcount > 0)) )
+		echo "$newcount new mail for $1."
+		for file in $new; do
+		  # Extract and decode subject and sender from mail.
+			subject="$(sed -n "/^Subject:/ s|Subject: *|| p" "$file" |
+				perl -CS -MEncode -ne 'print decode("MIME-Header", $_)')"
+			from="$(sed -n "/^From:/ s|From: *|| p" "$file" |
+				perl -CS -MEncode -ne 'print decode("MIME-Header", $_)')"
+			from="${from% *}" ; from="${from%\"}" ; from="${from#\"}"
+				notify-send "  $from:" "$subject"
+		done
+		;;
+	*) echo "No new mail for $1." ;;
+esac
