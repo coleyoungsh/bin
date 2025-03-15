@@ -40,4 +40,3 @@ case "$1" in
   "-P") repo_action "push" ;;
   *) repo_action "status -u" ;;
 esac
-
