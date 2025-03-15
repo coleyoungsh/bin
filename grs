@@ -16,7 +16,7 @@ hr() {
 } # https://www.reddit.com/r/commandline/comments/sdy47y/print_a_horizontal_line_to_the_console_spanning/
 
 print_origin() {
-  printf "\e[32m$(git config get remote.origin.url)\e[0m "
+  printf "\e[32m$(git -C $1 config get remote.origin.url)\e[0m "
 }
 
 repo_pull ()
@@ -26,7 +26,7 @@ repo_pull ()
     cd "$repo"
     print_origin
     git pull --rebase
-    hr 
+    hr "-"
   done
 }
 
@@ -34,11 +34,17 @@ repo_status ()
 {
   for repo in ${repo_dirs[@]}
   do
-    cd "$repo"
-    print_origin
-    git status -u
-    hr
+    print_origin "$repo"
+    git -C "$repo" status -u
+    repo_not_pushed "$repo"
+    hr "-"
   done
+}
+
+repo_not_pushed ()
+{
+  local unpushed=$(git -C $1 cherry -v)
+  [ ! -z "$unpushed" ] && printf "\n\e[31mLocal unpushed commits:\e[36m\n$unpushed\e[0m\n"
 }
 
 case "$1" in
