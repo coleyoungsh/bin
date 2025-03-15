@@ -8,6 +8,7 @@ $HOME/.todo
 $HOME/.reminders
 $HOME/Documents/notes
 $HOME/.local/repos/make-total-deploy)
+$HOME/.local/share/bmks)
 
 hr() { 
   i=1; while [ $i -le $COLUMNS ] ; do 
