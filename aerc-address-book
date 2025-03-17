@@ -1,0 +1,4 @@
+#! /bin/sh
+# simple script to combine address book providers for aerc
+khard email -a addressbook --parsable --remove-first-line "$1"
+notmuch address "$1"
