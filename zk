@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+
+NOTEDIR="$HOME/Documents/notes" #sanitize this
+EDITOR="nvim"
+DATE=$(date "+%Y-%m-%d")
+UUID=$(uuidgen)
+TITLE=""
+
+throw_error() {
+  echo $1
+  exit 1
+}
+
+new_note() {
+  [[ -z $TITLE ]] \
+    && read -p "Title: " TITLE
+  # body="$1"
+  new_note="$NOTEDIR/$UUID.md"
+
+  touch $new_note
+  [[ -n $TITLE ]] && echo "# $TITLE" >> $new_note
+
+  # TODO: fix this
+  # [[ -n $body ]] && echo "$body" >> $new_note
+  
+  $EDITOR $new_note
+  exit 0
+}
+
+populate_fields() {
+  new_note=$1
+  time=$(date "+%I:%M")
+
+  sed -i "s/<date>/$DATE/g" $1
+  sed -i "s/<id>/$UUID/g" $1
+  sed -i "s/<time>/$time/g" $1
+  sed -i "s/<title>/$TITLE/g" $1
+}
+
+gen_template() {
+  # refactor to open in /tmp and then copy if saved.
+  template="$NOTEDIR/.templates/$1.md"
+
+  # check if template exists
+  [[ ! -f $template ]] && throw_error "Error: no such template '$1' found."
+
+  note_generated="$NOTEDIR/$UUID.md"
+
+  cp $template $note_generated 
+  populate_fields $note_generated
+  $EDITOR $note_generated
+  exit 0
+}
+
+gen_daily() {
+  locate_daily=$(grep -lr "# $DATE" --include "*.md" $NOTEDIR)
+  [[ -z $locate_daily ]] && gen_template "daily" || $EDITOR $locate_daily
+}
+
+prune() {
+  # TODO: implement check for if no files are found and echo message
+  [[ ! $1 =~ ^[0-9]+$ ]] && throw_error "Bad Argument: '$1' is not a number."
+  for file in $NOTEDIR/*; do
+    [[ $(wc -w < $file) -lt $1 ]] \
+      && bat $file \
+      && read -p "(e)dit, (d)elete, or [Enter]continue: " choice \
+      && printf "\n" \
+      && case "$choice" in
+        [Ee]) $EDITOR $file ;;
+        [Dd]) 
+          read -r -p "Are you sure? [y/N] " response
+          case "$response" in
+            [yY]) rm $file && echo "Removed $file";;
+            *) continue ;;
+          esac ;;
+        *) continue ;;
+      esac \
+  done
+  exit 0
+}
+
+usage() {
+  printf "zk: glue marksman LSP and your notebook together!
+
+USAGE:
+
+  zk [options]
+
+OPTIONS:
+  zk -g <name_of_template>
+    Generate a new note from a template in: $NOTEDIR/.templates/
+  zk -p <word_count>
+    Prune empty notes from $NOTEDIR
+  zk -t "\<title\>"
+    The title you would like to give a new note with -n or the title you would
+    like populated inside of a template
+  zk -n
+    Generate new note
+
+Templates can contain fields to automatically populated with information, available fields are:
+
+    <date>  | the current date
+    <time>  | the current time
+    <id>    | uuid of note (corrosponds to file name) 
+    <title> | title pass from -t
+
+By default opening zk generates or opens the daily note, lingering empty dailies can be cleaned up with -p
+  \n" 
+
+  exit 0
+}
+
+optstring="t:nhg:p:"
+
+while getopts $optstring flag
+do
+    case "${flag}" in
+        t) TITLE=${OPTARG};;
+    esac
+done
+
+OPTIND=1
+
+while getopts $optstring flag
+do
+    case "${flag}" in
+        n) new_note ${OPTARG} && echo "new note";;
+        p) prune ${OPTARG};;
+        h) usage ;;
+        g) gen_template ${OPTARG} ;;
+        *) usage ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+gen_daily
