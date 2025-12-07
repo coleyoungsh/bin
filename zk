@@ -1,42 +1,37 @@
 #!/usr/bin/env bash
 
-NOTEDIR="$HOME/Documents/notes" #sanitize this
+# Define some variables for notes directory,
+# preferred editor, and date format
+NOTEDIR="$HOME/Documents/notes/"
 EDITOR="nvim"
-DATE=$(date "+%Y-%m-%d")
-UUID=$(uuidgen)
-TITLE=""
+DATE_STR=$(date "+%Y-%m-%d")
+TIME_STR=$(date "+%I:%M")
+
+# **DO NOT MESS WITH THESE**
+NOTEDIR=$(echo "$NOTEDIR" | sed 's:/*$::') # sanitize $NOTEDIR; remove trailing '/'
+UUID=$(uuidgen) 
 
 throw_error() {
   echo $1
   exit 1
 }
 
-# TODO: refactor to allow reading initial note content from stdin
-new_note() {
-  [[ -z $TITLE ]] \
-    && read -p "Title: " TITLE
-
-  new_note="$NOTEDIR/$UUID.md"
-  touch $new_note
-  [[ -n $TITLE ]] && echo "# $TITLE" >> $new_note
-
-  $EDITOR $new_note
-  exit 0
-}
-
 populate_fields() {
   new_note=$1
-  time=$(date "+%I:%M")
 
-  sed -i "s/<date>/$DATE/g" $1
-  sed -i "s/<id>/$UUID/g" $1
-  sed -i "s/<time>/$time/g" $1
+  sed -i "s/<date>/$DATE_STR/g" $1
+  sed -i "s/<time>/$TIME_STR/g" $1
+  sed -i "s/<uuid>/$UUID/g" $1
   sed -i "s/<title>/$TITLE/g" $1
 }
 
-gen_template() {
+# TODO: refactor to allow reading initial note content from stdin
+gen_from_template() {
   template="$NOTEDIR/.templates/$1.md"
+
   [[ ! -f $template ]] && throw_error "Error: no such template '$1' found."
+  [[ -z $TITLE ]] && read -p "Title: " TITLE
+  [[ -z $TITLE ]] && TITLE="$UUID"
 
   note_generated="$NOTEDIR/$UUID.md"
   cp $template $note_generated 
@@ -46,8 +41,17 @@ gen_template() {
 }
 
 gen_daily() {
-  locate_daily=$(grep -lr "# $DATE" --include "*.md" $NOTEDIR)
-  [[ -z $locate_daily ]] && gen_template "daily" || $EDITOR $locate_daily
+  locate_daily=$(grep -lr "# $DATE_STR" --include "*.md" $NOTEDIR)
+  [[ -z $locate_daily ]] && gen_from_template "daily" || $EDITOR $locate_daily
+}
+
+gen_notedir() {
+  read -p "The path '$NOTEDIR' does not exist. Would you like to create it? \
+  [y/N]" response
+  case "$response" in
+    [yY]) mkdir -p $NOTEDIR && echo "$NOTEDIR created.";;
+    *) echo "No action taken." ;;
+  esac
 }
 
 prune() {
@@ -63,8 +67,8 @@ prune() {
         [Dd]) 
           read -r -p "Are you sure? [y/N] " response
           case "$response" in
-            [yY]) rm $file && echo "Removed $file";;
-            *) continue ;;
+            [yY]) rm $file && echo -e "\nRemoved $file";;
+            *) echo -e "\nNo action taken." ;;
           esac ;;
         *) continue ;;
       esac \
@@ -94,7 +98,9 @@ OPTIONS:
   zk -g <name_of_template>
     Generate a new note from a template in: \$NOTEDIR/.templates/
   zk -p <word_count>
-    Prune empty notes from \$NOTEDIR
+    Search \$NOTEDIR for notes with a word count less than the supplied number
+    and be prompted to edit or delete them. Helps to expand thin notes and get
+    rid of empty ones.
   zk -t "\<title\>"
     The title you would like to give a new note with -n or the title you would
     like populated inside of a template
@@ -104,8 +110,8 @@ OPTIONS:
 Templates can contain fields to automatically populated with information, available fields are:
 
     <date>    | the current date
-    <time>    | the current time
-    <id>      | uuid of note (corrosponds to file name) 
+    <time>    | the current TIME_STR
+    <uuid>      | uuid of note (corrosponds to file name) 
     <title>   | title pass from -t
 
 By default opening zk generates or opens the daily note, lingering empty dailies can be cleaned up with -p
@@ -113,6 +119,8 @@ By default opening zk generates or opens the daily note, lingering empty dailies
 
   exit 0
 }
+
+[[ ! -d "$NOTEDIR" ]] && gen_notedir
 
 optstring="t:ng:p:h"
 
@@ -128,8 +136,8 @@ OPTIND=1
 while getopts $optstring flag
 do
     case "${flag}" in
-        n) new_note ;;
-        g) gen_template ${OPTARG} ;;
+        n) gen_from_template "default";;
+        g) gen_from_template ${OPTARG} ;;
         p) prune ${OPTARG};;
         h) usage ;;
         *) usage ;;
