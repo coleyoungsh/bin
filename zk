@@ -8,12 +8,30 @@ DATE_STR=$(date "+%Y-%m-%d")
 TIME_STR=$(date "+%I:%M")
 
 # **DO NOT MESS WITH THESE**
-NOTEDIR=$(echo "$NOTEDIR" | sed 's:/*$::') # sanitize $NOTEDIR; remove trailing '/'
+NOTEDIR=$(echo "$NOTEDIR" | sed 's:/*$::') # Sanitize $NOTEDIR; remove trailing '/'
 UUID=$(uuidgen) 
+TITLE=
 
 throw_error() {
   echo $1
   exit 1
+}
+
+# TODO: git sync functionality
+# check if $NOTEDIR is checked into git
+# if checked into git, wrap all functions in git wrapper for commit messages
+# after action complete, commit changes
+# wrap git for push or pull actions
+# ex. zk push/pull etc
+# need for added, modified, renamed, deleted
+
+zk_git() {
+  hostname=$(cat /etc/hostname)
+
+  git -C $NOTEDIR status -s | grep '^??' | awk '{print $2}' | while read untracked; do
+    [[ -d $untracked ]] && echo "added dir: $untracked @$hostname"
+    [[ -f $untracked ]] && echo "added file: $untracked @$hostname"
+  done
 }
 
 populate_fields() {
@@ -31,7 +49,7 @@ gen_from_template() {
 
   [[ ! -f $template ]] && throw_error "Error: no such template '$1' found."
   [[ -z $TITLE ]] && read -p "Title: " TITLE
-  [[ -z $TITLE ]] && TITLE="$UUID"
+  [[ -z $TITLE ]] && TITLE=$UUID # Title defaults to uuid if none supplied
 
   note_generated="$NOTEDIR/$UUID.md"
   cp $template $note_generated 
@@ -42,7 +60,10 @@ gen_from_template() {
 
 gen_daily() {
   locate_daily=$(grep -lr "# $DATE_STR" --include "*.md" $NOTEDIR)
-  [[ -z $locate_daily ]] && gen_from_template "daily" || $EDITOR $locate_daily
+  [[ -z $locate_daily ]] \
+    && TITLE=$DATE_STR \
+    && gen_from_template "daily" \
+    || $EDITOR $locate_daily
 }
 
 gen_notedir() {
@@ -121,6 +142,7 @@ By default opening zk generates or opens the daily note, lingering empty dailies
 }
 
 [[ ! -d "$NOTEDIR" ]] && gen_notedir
+# [[ -d $NOTEDIR/.git ]] && zk_git
 
 optstring="t:ng:p:h"
 

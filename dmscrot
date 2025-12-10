@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SCSH_FORMAT="%Y-%m-%d_$wx$h.png"
-SCSH_DIR="$HOME/pic/scrot/"
+SCSH_DIR="$HOME/Pictures/screenshots"
 
 mkdir -p $SCSH_DIR
 
