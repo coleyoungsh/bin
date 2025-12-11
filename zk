@@ -23,15 +23,21 @@ throw_error() {
 # after action complete, commit changes
 # wrap git for push or pull actions
 # ex. zk push/pull etc
-# need for added, modified, renamed, deleted
-
-zk_git() {
+zk_git_message() {
+  grep_str=$1
+  state=$2
   hostname=$(cat /etc/hostname)
 
-  git -C $NOTEDIR status -s | grep '^??' | awk '{print $2}' | while read untracked; do
-    [[ -d $untracked ]] && echo "added dir: $untracked @$hostname"
-    [[ -f $untracked ]] && echo "added file: $untracked @$hostname"
+  git -C $NOTEDIR status -s | grep -e "$grep_str" | awk '{print $2}' | while read object; do
+    git add $NOTEDIR/$object
+    git commit -m "$state: $object @$hostname"
   done
+}
+
+zk_git() {
+  zk_git_message "??" "added"
+  zk_git_message " M" "changed"
+  zk_git_message " D" "removed"
 }
 
 populate_fields() {
@@ -55,7 +61,6 @@ gen_from_template() {
   cp $template $note_generated 
   populate_fields $note_generated
   $EDITOR $note_generated
-  exit 0
 }
 
 gen_daily() {
@@ -94,7 +99,6 @@ prune() {
         *) continue ;;
       esac \
   done
-  exit 0
 }
 
 # read_in() {
@@ -142,7 +146,6 @@ By default opening zk generates or opens the daily note, lingering empty dailies
 }
 
 [[ ! -d "$NOTEDIR" ]] && gen_notedir
-# [[ -d $NOTEDIR/.git ]] && zk_git
 
 optstring="t:ng:p:h"
 
@@ -155,6 +158,7 @@ done
 
 OPTIND=1
 
+# TODO: cover errors for illegal options
 while getopts $optstring flag
 do
     case "${flag}" in
@@ -162,8 +166,9 @@ do
         g) gen_from_template ${OPTARG} ;;
         p) prune ${OPTARG};;
         h) usage ;;
-        *) usage ;;
     esac
 done
 
-gen_daily
+[[ $# = 0 ]] && gen_daily
+
+[[ -d $NOTEDIR/.git ]] && zk_git
