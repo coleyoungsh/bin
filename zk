@@ -17,27 +17,25 @@ throw_error() {
   exit 1
 }
 
-# TODO: git sync functionality
-# check if $NOTEDIR is checked into git
-# if checked into git, wrap all functions in git wrapper for commit messages
-# after action complete, commit changes
-# wrap git for push or pull actions
-# ex. zk push/pull etc
-zk_git_message() {
+zk_wrap_git() {
+  git -C $NOTEDIR "$@"
+}
+
+zk_git_commit() {
   grep_str=$1
   state=$2
   hostname=$(cat /etc/hostname)
 
-  git -C $NOTEDIR status -s | grep -e "$grep_str" | awk '{print $2}' | while read object; do
-    git add $NOTEDIR/$object
-    git commit -m "$state: $object @$hostname"
+  zk_wrap_git status -s | grep -e "$grep_str" | awk '{print $2}' | while read object; do
+    zk_wrap_git add $object
+    zk_wrap_git commit -m "$state: $object @$hostname"
   done
 }
 
-zk_git() {
-  zk_git_message "??" "added"
-  zk_git_message " M" "changed"
-  zk_git_message " D" "removed"
+zk_auto_git() {
+  zk_git_commit "??" "added"
+  zk_git_commit " M" "changed"
+  zk_git_commit " D" "removed"
 }
 
 populate_fields() {
@@ -51,14 +49,12 @@ populate_fields() {
 
 # TODO: refactor to allow reading initial note content from stdin
 gen_from_template() {
-  template="$NOTEDIR/.templates/$1.md"
+  template_file="$NOTEDIR/.templates/${TEMPLATE:-default}.md"
 
-  [[ ! -f $template ]] && throw_error "Error: no such template '$1' found."
-  [[ -z $TITLE ]] && read -p "Title: " TITLE
-  [[ -z $TITLE ]] && TITLE=$UUID # Title defaults to uuid if none supplied
+  [[ ! -f $template_file ]] && throw_error "Error: no such template file '$TEMPLATE' found."
 
   note_generated="$NOTEDIR/$UUID.md"
-  cp $template $note_generated 
+  cp $template_file $note_generated 
   populate_fields $note_generated
   $EDITOR $note_generated
 }
@@ -120,39 +116,36 @@ USAGE:
   zk [options]
 
 OPTIONS:
-  zk -g <name_of_template>
-    Generate a new note from a template in: \$NOTEDIR/.templates/
+  zk -n [<-t <title> -m <template_file>]
+    Generate new note; may supply a template_file name to use when generating
   zk -p <word_count>
     Search \$NOTEDIR for notes with a word count less than the supplied number
     and be prompted to edit or delete them. Helps to expand thin notes and get
     rid of empty ones.
-  zk -t "\<title\>"
-    The title you would like to give a new note with -n or the title you would
-    like populated inside of a template
-  zk -n
-    Generate new note
+  zk -g <git_arguments>
+    Pass everything after -g directly to git inside \$NOTEDIR
 
 Templates can contain fields to automatically populated with information, available fields are:
 
-    <date>    | the current date
-    <time>    | the current TIME_STR
-    <uuid>      | uuid of note (corrosponds to file name) 
-    <title>   | title pass from -t
+    <date>  | the current date
+    <time>  | the current TIME_STR
+    <uuid>  | uuid of note (corrosponds to file name) 
+    <title> | title pass from -t
 
-By default opening zk generates or opens the daily note, lingering empty dailies can be cleaned up with -p
+By default opening zk generates or opens the daily note; lingering, empty dailies can be cleaned up with -p
   \n" 
-
-  exit 0
 }
 
 [[ ! -d "$NOTEDIR" ]] && gen_notedir
 
-optstring="t:ng:p:h"
+optstring="g:t:m:p:hn"
 
 while getopts $optstring flag
 do
     case "${flag}" in
+        g) zk_wrap_git ${@:2} && exit 0 ;;
         t) TITLE=${OPTARG};;
+        m) TEMPLATE=${OPTARG};;
     esac
 done
 
@@ -162,13 +155,12 @@ OPTIND=1
 while getopts $optstring flag
 do
     case "${flag}" in
-        n) gen_from_template "default";;
-        g) gen_from_template ${OPTARG} ;;
-        p) prune ${OPTARG};;
-        h) usage ;;
+        p) prune ${OPTARG} ;;
+        h) usage && exit 0 ;;
+        n) gen_from_template ;;
     esac
 done
 
 [[ $# = 0 ]] && gen_daily
 
-[[ -d $NOTEDIR/.git ]] && zk_git
+[[ -d $NOTEDIR/.git ]] && zk_auto_git
