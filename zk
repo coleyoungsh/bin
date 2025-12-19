@@ -62,8 +62,8 @@ gen_from_template() {
 gen_daily() {
   locate_daily=$(grep -lr "# $DATE_STR" --include "*.md" $NOTEDIR)
   [[ -z $locate_daily ]] \
-    && TITLE=$DATE_STR \
-    && gen_from_template "daily" \
+    && TEMPLATE="daily" \
+    && gen_from_template \
     || $EDITOR $locate_daily
 }
 
